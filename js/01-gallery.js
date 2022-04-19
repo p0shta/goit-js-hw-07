@@ -28,7 +28,7 @@ function createGalleryItemsMarkup(items) {
 
 galleryEl.addEventListener('click', onGalleryElClick);
 function onGalleryElClick(e) {
-    const imgAttribute = e.target.dataset.source;
+    const imgDataSrc = e.target.dataset.source;
 
     e.preventDefault();
 
@@ -36,21 +36,22 @@ function onGalleryElClick(e) {
         return;
     }
 
-    openModal(imgAttribute);
+    openModal(imgDataSrc);
 }
 
-function openModal(attribute) {
-    const instance = basicLightbox.create(`<img src="${attribute}" width="800" height="600">`);
-    instance.show();
+function openModal(imgDataSrc) {
+    const itemEl = `<img src="${imgDataSrc}" width="800" height="600">`;
+    const modal = basicLightbox.create(itemEl);
 
-    closeModalByButtonEsc(instance);
+    modal.show(closeModalByButtonEsc(modal));
 }
 
-function closeModalByButtonEsc(instance) {
-    document.addEventListener('keydown', onKeydownEsc, { once: true });
+function closeModalByButtonEsc(modal) {
+    galleryEl.addEventListener('keydown', onKeydownEsc);
+
     function onKeydownEsc(e) {
         if (e.code === 'Escape') {
-            instance.close();
+            modal.close();
         }
     }
 }
