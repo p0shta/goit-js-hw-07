@@ -26,19 +26,31 @@ function createGalleryItemsMarkup(items) {
     return markup;
 }
 
-galleryEl.addEventListener('click', onGalleryItemClick);
-function onGalleryItemClick(e) {
-    const imgAtt = e.target.dataset.source;
+galleryEl.addEventListener('click', onGalleryElClick);
+function onGalleryElClick(e) {
+    const imgAttribute = e.target.dataset.source;
+
     e.preventDefault();
 
     if (e.target.nodeName !== 'IMG') {
         return;
     }
 
-    openModal(imgAtt);
+    openModal(imgAttribute);
 }
 
 function openModal(attribute) {
     const instance = basicLightbox.create(`<img src="${attribute}" width="800" height="600">`);
     instance.show();
+
+    closeModalByButtonEsc(instance);
+}
+
+function closeModalByButtonEsc(instance) {
+    document.addEventListener('keydown', onKeydownEsc, { once: true });
+    function onKeydownEsc(e) {
+        if (e.code === 'Escape') {
+            instance.close();
+        }
+    }
 }
